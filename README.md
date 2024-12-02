@@ -14,6 +14,9 @@ The mod can be configured as follows:
 
 See the [Configuration](#configuration) section below.
 
+# Monster Detection
+The [Stop on Monster Detection](https://steamcommunity.com/sharedfiles/filedetails/?id=3292592993) mod is recommended.  It prevents monsters that are spotted (the asterisk icon) from ambushing the player.  
+
 # Configuration
 
 The configuration file will be created on the first game run and can be found at `%AppData%\..\LocalLow\Magnum Scriptum Ltd\Quasimorph\QM_SpeedToggle\config.json`.
