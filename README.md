@@ -14,9 +14,6 @@ The mod can be configured as follows:
 
 See the [Configuration](#configuration) section below.
 
-# Caps Lock Key
-Note that the Caps Lock's key keyboard light does not indicate the speed activation.  The mod only looks if it has been tapped or held.
-
 # Configuration
 
 The configuration file will be created on the first game run and can be found at `%AppData%\..\LocalLow\Magnum Scriptum Ltd\Quasimorph\QM_SpeedToggle\config.json`.
