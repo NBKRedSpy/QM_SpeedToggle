@@ -13,28 +13,26 @@ namespace QM_SpeedToggle
 {
     public static class Plugin
     {
-        public static string ModAssemblyName => Assembly.GetExecutingAssembly().GetName().Name;
-
-        public static string ConfigPath => Path.Combine(Application.persistentDataPath, ModAssemblyName, "config.json");
-        public static string ModPersistenceFolder => Path.Combine(Application.persistentDataPath, ModAssemblyName);
+        public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
         public static ModConfig Config { get; private set; }
+
 
         [Hook(ModHookType.AfterConfigsLoaded)]
         public static void AfterConfig(IModContext context)
         {
-            Directory.CreateDirectory(ModPersistenceFolder);
-
-            Config = ModConfig.LoadConfig(ConfigPath);
+            Directory.CreateDirectory(ConfigDirectories.AllModsConfigFolder);
+            ConfigDirectories.UpgradeModDirectory();
+            Directory.CreateDirectory(ConfigDirectories.ModPersistenceFolder);
+            Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath);
 
             ToggleSpeedKey.Init();
             ToggleSpeedKey.Key = Config.ToggleKey;
-
 
             GameSettings_CreatureAnimationSpeed__Patch.Speed = Config.AnimationSpeed;
             GameSettings_CreatureAnimationSpeed__Patch.Mode = Config.ActivationMode;
 
 
-            new Harmony("NBKRedSpy_" + ModAssemblyName).PatchAll();
+            new Harmony("NBKRedSpy_" + ConfigDirectories.ModAssemblyName).PatchAll();
         }
 
      

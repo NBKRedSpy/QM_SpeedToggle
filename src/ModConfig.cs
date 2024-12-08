@@ -22,8 +22,13 @@ namespace QM_SpeedToggle
         public CreatureAnimationSpeed AnimationSpeed = CreatureAnimationSpeed.X8;
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public SpeedActivationMode ActivationMode = SpeedActivationMode.Toggle;
+        public SpeedActivationMode ActivationMode = SpeedActivationMode.Hold;
 
+        /// <summary>
+        /// Loads the configuration
+        /// </summary>
+        /// <param name="configPath">The full path to the config file.</param>
+        /// <returns></returns>
         public static ModConfig LoadConfig(string configPath)
         {
             ModConfig config;

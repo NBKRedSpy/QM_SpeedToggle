@@ -3,9 +3,9 @@
 ![thumbnail icon](media/thumbnail.png)
 
 Want to move across the map quickly, but don't want to want combat to be at x8 speed all the time?
-This mod allows the player to temporarily change the game's "animation speed" to x8 by pressing a key.
+This mod allows the player to temporarily change the game's "animation speed" to x8 by holding a key.
 
-By default, the Caps Lock key is used as a toggle to enable or disable the speed change.
+By default, holding down the Caps Lock key will set the animation speed to x8, and releasing it will return to the game's animation speed setting.
 
 The mod can be configured as follows:
 * The key to activate the speed change.
@@ -19,13 +19,13 @@ The [Stop on Monster Detection](https://steamcommunity.com/sharedfiles/filedetai
 
 # Configuration
 
-The configuration file will be created on the first game run and can be found at `%AppData%\..\LocalLow\Magnum Scriptum Ltd\Quasimorph\QM_SpeedToggle\config.json`.
+The configuration file will be created on the first game run and can be found at `%AppData%\..\LocalLow\Magnum Scriptum Ltd\Quasimorph_ModConfigs\QM_SpeedToggle\config.json`.
 
 |Name|Default|Description|
 |--|--|--|
 |ToggleKey|CapsLock|The key that will activate the speed change.  See the [Key List](#key-list) section.|
 |AnimationSpeed|X8|The speed change to apply.  Important! This can only be X1, X2, X4, or X8|
-|ActivationMode|Toggle|How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates|
+|ActivationMode|Hold|How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates|
 
 
 ## Key List
@@ -39,3 +39,9 @@ Thanks!
 
 # Source Code
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
+
+# Change Log
+
+# 1.1.0
+* Moved config file directory.
+* Changed default activation from Toggle to Hold.
