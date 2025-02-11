@@ -55,6 +55,14 @@ The configuration file will be created on the first game run and can be found at
 [td]How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates
 [/td]
 [/tr]
+[tr]
+[td]DoNotStopOnSpeedKeyDown
+[/td]
+[td]true
+[/td]
+[td]When set to [i]true[/i], will not stop the player's movement when the Speed Toggle Key is pressed.  [i]false[/i] uses the game's default logic where any key press will stop the player's queued movement.
+[/td]
+[/tr]
 [/table]
 
 [h2]Key List[/h2]
@@ -73,6 +81,16 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 [h1]Change Log[/h1]
+
+[h1]1.2.0[/h1]
+[list]
+[*]0.8.5 added logic to stop player movement when any key is pressed.  This update has the option DoNotStopOnSpeedKeyDown to ignore the Speed Toggle Key.  It is enabled by default.
+[/list]
+
+[h1]1.1.1[/h1]
+[list]
+[*]Changed default config to use Hold instead of Toggle activation
+[/list]
 
 [h1]1.1.0[/h1]
 [list]

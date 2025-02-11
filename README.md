@@ -26,6 +26,7 @@ The configuration file will be created on the first game run and can be found at
 |ToggleKey|CapsLock|The key that will activate the speed change.  See the [Key List](#key-list) section.|
 |AnimationSpeed|X8|The speed change to apply.  Important! This can only be X1, X2, X4, or X8|
 |ActivationMode|Hold|How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates|
+|DoNotStopOnSpeedKeyDown|true|When set to `true`, will not stop the player's movement when the Speed Toggle Key is pressed.  `false` uses the game's default logic where any key press will stop the player's queued movement.|
 
 
 ## Key List
@@ -41,6 +42,12 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 # Change Log
+
+# 1.2.0
+* 0.8.5 added logic to stop player movement when any key is pressed.  This update has the option DoNotStopOnSpeedKeyDown to ignore the Speed Toggle Key.  It is enabled by default.
+
+# 1.1.1
+* Changed default config to use Hold instead of Toggle activation
 
 # 1.1.0
 * Moved config file directory.

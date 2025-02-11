@@ -1,0 +1,578 @@
+﻿.method private hidebysig 
+	instance void Update () cil managed 
+{
+	// Method begins at RVA 0x40e8
+	// Header size: 12
+	// Code size: 1239 (0x4d7)
+	.maxstack 18
+	.locals init (
+		[0] class MGSC.Player,
+		[1] class MGSC.TurnMetadata,
+		[2] class MGSC.TurnController,
+		[3] class MGSC.SelectGrenadeTargetController,
+		[4] class MGSC.SelectUltimateTargetController,
+		[5] class MGSC.SelectPlaceableTargetController,
+		[6] class MGSC.SelectShootTargetController,
+		[7] class MGSC.SelectVestController,
+		[8] class MGSC.DungeonUI,
+		[9] valuetype MGSC.GameKey/KeyType,
+		[10] class MGSC.PlayerCommandQueue,
+		[11] class MGSC.BaseDungeonScenario,
+		[12] valuetype MGSC.GameKey/KeyType,
+		[13] bool,
+		[14] valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator<class MGSC.IScreen>,
+		[15] class MGSC.IScreen,
+		[16] bool,
+		[17] bool
+	)
+
+	// if (!_initialized || _finished)
+	IL_0000: ldarg.0
+	IL_0001: ldfld bool MGSC.DungeonGameMode::_initialized
+	IL_0006: brfalse.s IL_0010
+
+	IL_0008: ldarg.0
+	IL_0009: ldfld bool MGSC.DungeonGameMode::_finished
+	IL_000e: brfalse.s IL_0011
+
+	// }
+	IL_0010: ret
+
+	// Player player = Creatures.Player;
+	IL_0011: ldarg.0
+	IL_0012: call instance class MGSC.Creatures MGSC.DungeonGameMode::get_Creatures()
+	IL_0017: ldfld class MGSC.Player MGSC.Creatures::Player
+	IL_001c: stloc.0
+	// if (player.CreatureData.Health.Dead && !player.MutatedQuasimorph)
+	IL_001d: ldloc.0
+	IL_001e: ldfld class MGSC.CreatureData MGSC.Creature::CreatureData
+	IL_0023: ldfld class MGSC.HealthInfo MGSC.CreatureData::Health
+	IL_0028: callvirt instance bool MGSC.HealthInfo::get_Dead()
+	IL_002d: brfalse.s IL_006a
+
+	IL_002f: ldloc.0
+	IL_0030: callvirt instance bool MGSC.Player::get_MutatedQuasimorph()
+	IL_0035: brtrue.s IL_006a
+
+	// SharedUi.EscScreen.Hide();
+	IL_0037: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_003c: ldc.i4.0
+	IL_003d: callvirt instance void MGSC.EscScreen::Hide(bool)
+	// SingletonMonoBehaviour<DungeonUI>.Instance.HideScreensAfterDeath();
+	IL_0042: call !0 class MGSC.SingletonMonoBehaviour`1<class MGSC.DungeonUI>::get_Instance()
+	IL_0047: callvirt instance void MGSC.DungeonUI::HideScreensAfterDeath()
+	// _pathHighlighter.gameObject.SetActive(value: false);
+	IL_004c: ldarg.0
+	IL_004d: ldfld class MGSC.PathHighlighter MGSC.DungeonGameMode::_pathHighlighter
+	IL_0052: callvirt instance class [UnityEngine.CoreModule]UnityEngine.GameObject [UnityEngine.CoreModule]UnityEngine.Component::get_gameObject()
+	IL_0057: ldc.i4.0
+	IL_0058: callvirt instance void [UnityEngine.CoreModule]UnityEngine.GameObject::SetActive(bool)
+	// GameCamera.SetCameraMode(CameraMode.GameFinished);
+	IL_005d: ldarg.0
+	IL_005e: call instance class MGSC.GameCamera MGSC.DungeonGameMode::get_GameCamera()
+	IL_0063: ldc.i4.6
+	IL_0064: callvirt instance void MGSC.GameCamera::SetCameraMode(valuetype MGSC.CameraMode)
+	// UserModSystem.InvokeHook(_state, ModHookType.DungeonUpdateBeforeGameLoop);
+	IL_0069: ret
+
+	IL_006a: ldarg.0
+	IL_006b: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0070: ldc.i4.7
+	IL_0071: call void MGSC.UserModSystem::InvokeHook(class MGSC.State, valuetype MGSC.ModHookType)
+	// _state.Get<GameLoop>().Tick();
+	IL_0076: ldarg.0
+	IL_0077: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_007c: callvirt instance !!0 MGSC.State::Get<class MGSC.GameLoop>()
+	IL_0081: callvirt instance void MGSC.GameLoop::Tick()
+	// UserModSystem.InvokeHook(_state, ModHookType.DungeonUpdateAfterGameLoop);
+	IL_0086: ldarg.0
+	IL_0087: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_008c: ldc.i4.8
+	IL_008d: call void MGSC.UserModSystem::InvokeHook(class MGSC.State, valuetype MGSC.ModHookType)
+	// _state.Get<FireController>().VisualUpdate(Time.deltaTime);
+	IL_0092: ldarg.0
+	IL_0093: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0098: callvirt instance !!0 MGSC.State::Get<class MGSC.FireController>()
+	IL_009d: call float32 [UnityEngine.CoreModule]UnityEngine.Time::get_deltaTime()
+	IL_00a2: callvirt instance void MGSC.FireController::VisualUpdate(float32)
+	// TurnMetadata turnMetadata = _state.Get<TurnMetadata>();
+	IL_00a7: ldarg.0
+	IL_00a8: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00ad: callvirt instance !!0 MGSC.State::Get<class MGSC.TurnMetadata>()
+	IL_00b2: stloc.1
+	// if (TurnSystem.IsPaused(turnMetadata))
+	IL_00b3: ldloc.1
+	IL_00b4: call bool MGSC.TurnSystem::IsPaused(class MGSC.TurnMetadata)
+	IL_00b9: brfalse.s IL_00bc
+
+	// TurnController turnController = _state.Get<TurnController>();
+	IL_00bb: ret
+
+	IL_00bc: ldarg.0
+	IL_00bd: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00c2: callvirt instance !!0 MGSC.State::Get<class MGSC.TurnController>()
+	IL_00c7: stloc.2
+	// SelectGrenadeTargetController selectGrenadeTargetController = _state.Get<SelectGrenadeTargetController>();
+	IL_00c8: ldarg.0
+	IL_00c9: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00ce: callvirt instance !!0 MGSC.State::Get<class MGSC.SelectGrenadeTargetController>()
+	IL_00d3: stloc.3
+	// SelectUltimateTargetController selectUltimateTargetController = _state.Get<SelectUltimateTargetController>();
+	IL_00d4: ldarg.0
+	IL_00d5: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00da: callvirt instance !!0 MGSC.State::Get<class MGSC.SelectUltimateTargetController>()
+	IL_00df: stloc.s 4
+	// SelectPlaceableTargetController selectPlaceableTargetController = _state.Get<SelectPlaceableTargetController>();
+	IL_00e1: ldarg.0
+	IL_00e2: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00e7: callvirt instance !!0 MGSC.State::Get<class MGSC.SelectPlaceableTargetController>()
+	IL_00ec: stloc.s 5
+	// SelectShootTargetController selectShootTargetController = _state.Get<SelectShootTargetController>();
+	IL_00ee: ldarg.0
+	IL_00ef: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_00f4: callvirt instance !!0 MGSC.State::Get<class MGSC.SelectShootTargetController>()
+	IL_00f9: stloc.s 6
+	// SelectVestController selectVestController = _state.Get<SelectVestController>();
+	IL_00fb: ldarg.0
+	IL_00fc: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0101: callvirt instance !!0 MGSC.State::Get<class MGSC.SelectVestController>()
+	IL_0106: stloc.s 7
+	// turnController.Tick();
+	IL_0108: ldloc.2
+	IL_0109: callvirt instance void MGSC.TurnController::Tick()
+	// if (selectGrenadeTargetController.IsActive)
+	IL_010e: ldloc.3
+	IL_010f: callvirt instance bool MGSC.BaseContinuousLogicController::get_IsActive()
+	IL_0114: brfalse.s IL_011d
+
+	// selectGrenadeTargetController.Process();
+	IL_0116: ldloc.3
+	IL_0117: callvirt instance void MGSC.BaseContinuousLogicController::Process()
+	// if (selectUltimateTargetController.IsActive)
+	IL_011c: ret
+
+	IL_011d: ldloc.s 4
+	IL_011f: callvirt instance bool MGSC.BaseContinuousLogicController::get_IsActive()
+	IL_0124: brfalse.s IL_012e
+
+	// selectUltimateTargetController.Process();
+	IL_0126: ldloc.s 4
+	IL_0128: callvirt instance void MGSC.BaseContinuousLogicController::Process()
+	// if (selectPlaceableTargetController.IsActive)
+	IL_012d: ret
+
+	IL_012e: ldloc.s 5
+	IL_0130: callvirt instance bool MGSC.BaseContinuousLogicController::get_IsActive()
+	IL_0135: brfalse.s IL_013f
+
+	// selectPlaceableTargetController.Process();
+	IL_0137: ldloc.s 5
+	IL_0139: callvirt instance void MGSC.BaseContinuousLogicController::Process()
+	// if (selectShootTargetController.IsActive)
+	IL_013e: ret
+
+	IL_013f: ldloc.s 6
+	IL_0141: callvirt instance bool MGSC.BaseContinuousLogicController::get_IsActive()
+	IL_0146: brfalse.s IL_0150
+
+	// selectShootTargetController.Process();
+	IL_0148: ldloc.s 6
+	IL_014a: callvirt instance void MGSC.BaseContinuousLogicController::Process()
+	// if (selectVestController.IsActive)
+	IL_014f: ret
+
+	IL_0150: ldloc.s 7
+	IL_0152: callvirt instance bool MGSC.BaseContinuousLogicController::get_IsActive()
+	IL_0157: brfalse.s IL_0161
+
+	// selectVestController.Process();
+	IL_0159: ldloc.s 7
+	IL_015b: callvirt instance void MGSC.BaseContinuousLogicController::Process()
+	// DungeonUI instance = SingletonMonoBehaviour<DungeonUI>.Instance;
+	IL_0160: ret
+
+	IL_0161: call !0 class MGSC.SingletonMonoBehaviour`1<class MGSC.DungeonUI>::get_Instance()
+	IL_0166: stloc.s 8
+	// if (instance.spaceshipIntCon.IsActive)
+	IL_0168: ldloc.s 8
+	IL_016a: ldfld class MGSC.SpaceshipIntCon MGSC.DungeonUI::spaceshipIntCon
+	IL_016f: callvirt instance bool MGSC.MonoContinuousLogicController::get_IsActive()
+	IL_0174: brfalse.s IL_0183
+
+	// instance.spaceshipIntCon.Process();
+	IL_0176: ldloc.s 8
+	IL_0178: ldfld class MGSC.SpaceshipIntCon MGSC.DungeonUI::spaceshipIntCon
+	IL_017d: callvirt instance void MGSC.MonoContinuousLogicController::Process()
+	// if (instance.workbenchIntCon.IsActive)
+	IL_0182: ret
+
+	IL_0183: ldloc.s 8
+	IL_0185: ldfld class MGSC.WorkbenchIntCon MGSC.DungeonUI::workbenchIntCon
+	IL_018a: callvirt instance bool MGSC.MonoContinuousLogicController::get_IsActive()
+	IL_018f: brfalse.s IL_019e
+
+	// instance.workbenchIntCon.Process();
+	IL_0191: ldloc.s 8
+	IL_0193: ldfld class MGSC.WorkbenchIntCon MGSC.DungeonUI::workbenchIntCon
+	IL_0198: callvirt instance void MGSC.MonoContinuousLogicController::Process()
+	// _screensCache.Clear();
+	IL_019d: ret
+
+	IL_019e: ldarg.0
+	IL_019f: ldfld class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen> MGSC.DungeonGameMode::_screensCache
+	IL_01a4: callvirt instance void class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen>::Clear()
+	// _screensCache.Add(SharedUi.NarrativeTextScreen);
+	IL_01a9: ldarg.0
+	IL_01aa: ldfld class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen> MGSC.DungeonGameMode::_screensCache
+	IL_01af: call class MGSC.NarrativeTextScreen MGSC.SharedUi::get_NarrativeTextScreen()
+	IL_01b4: callvirt instance void class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen>::Add(!0)
+	// _screensCache.AddRange(instance.GeneralScreens);
+	IL_01b9: ldarg.0
+	IL_01ba: ldfld class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen> MGSC.DungeonGameMode::_screensCache
+	IL_01bf: ldloc.s 8
+	IL_01c1: callvirt instance class [mscorlib]System.Collections.Generic.IEnumerable`1<class MGSC.IScreen> MGSC.DungeonUI::get_GeneralScreens()
+	IL_01c6: callvirt instance void class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen>::AddRange(class [mscorlib]System.Collections.Generic.IEnumerable`1<!0>)
+	// if (_screensCache.Any((IScreen s) => s.IsActive))
+	IL_01cb: ldarg.0
+	IL_01cc: ldfld class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen> MGSC.DungeonGameMode::_screensCache
+	IL_01d1: ldsfld class [mscorlib]System.Func`2<class MGSC.IScreen, bool> MGSC.DungeonGameMode/'<>c'::'<>9__63_0'
+	IL_01d6: dup
+	IL_01d7: brtrue.s IL_01f0
+
+	// GameKey.KeyType input = SingletonMonoBehaviour<InputController>.Instance.GetInput(KeyLayout.UI);
+	IL_01d9: pop
+	IL_01da: ldsfld class MGSC.DungeonGameMode/'<>c' MGSC.DungeonGameMode/'<>c'::'<>9'
+	IL_01df: ldftn instance bool MGSC.DungeonGameMode/'<>c'::'<Update>b__63_0'(class MGSC.IScreen)
+	IL_01e5: newobj instance void class [mscorlib]System.Func`2<class MGSC.IScreen, bool>::.ctor(object, native int)
+	IL_01ea: dup
+	IL_01eb: stsfld class [mscorlib]System.Func`2<class MGSC.IScreen, bool> MGSC.DungeonGameMode/'<>c'::'<>9__63_0'
+
+	IL_01f0: call bool [System.Core]System.Linq.Enumerable::Any<class MGSC.IScreen>(class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0>, class [mscorlib]System.Func`2<!!0, bool>)
+	IL_01f5: brfalse.s IL_021c
+
+	IL_01f7: call !0 class MGSC.SingletonMonoBehaviour`1<class MGSC.InputController>::get_Instance()
+	IL_01fc: ldc.i4.2
+	IL_01fd: callvirt instance valuetype MGSC.GameKey/KeyType MGSC.InputController::GetInput(valuetype MGSC.KeyLayout)
+	IL_0202: stloc.s 12
+	// SingletonMonoBehaviour<UiCanvas>.Instance.Navigation.ProcessInput(input, out var interruptOtherProcessing);
+	IL_0204: call !0 class MGSC.SingletonMonoBehaviour`1<class MGSC.UiCanvas>::get_Instance()
+	IL_0209: callvirt instance class MGSC.Navigation MGSC.UiCanvas::get_Navigation()
+	IL_020e: ldloc.s 12
+	IL_0210: ldloca.s 13
+	IL_0212: callvirt instance void MGSC.Navigation::ProcessInput(valuetype MGSC.GameKey/KeyType, bool&)
+	// if (interruptOtherProcessing)
+	IL_0217: ldloc.s 13
+	IL_0219: brfalse.s IL_021c
+
+	// return;
+	IL_021b: ret
+
+	// foreach (IScreen item in _screensCache)
+	IL_021c: ldarg.0
+	IL_021d: ldfld class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen> MGSC.DungeonGameMode::_screensCache
+	IL_0222: callvirt instance valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator<!0> class [mscorlib]System.Collections.Generic.List`1<class MGSC.IScreen>::GetEnumerator()
+	IL_0227: stloc.s 14
+	.try
+	{
+		// foreach (IScreen item in _screensCache)
+		IL_0229: br.s IL_024f
+		// loop start (head: IL_024f)
+			IL_022b: ldloca.s 14
+			IL_022d: call instance !0 valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator<class MGSC.IScreen>::get_Current()
+			IL_0232: stloc.s 15
+			// if (item.IsActive)
+			IL_0234: ldloc.s 15
+			IL_0236: callvirt instance bool MGSC.IScreen::get_IsActive()
+			IL_023b: brfalse.s IL_024f
+
+			// item.Process(out var interruptProcessing);
+			IL_023d: ldloc.s 15
+			IL_023f: ldloca.s 16
+			IL_0241: callvirt instance void MGSC.IScreen::Process(bool&)
+			// if (interruptProcessing)
+			IL_0246: ldloc.s 16
+			IL_0248: brfalse.s IL_024f
+
+			// return;
+			IL_024a: leave IL_04d6
+
+			// foreach (IScreen item in _screensCache)
+			IL_024f: ldloca.s 14
+			IL_0251: call instance bool valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator<class MGSC.IScreen>::MoveNext()
+			IL_0256: brtrue.s IL_022b
+		// end loop
+
+		// (no C# code)
+		IL_0258: leave.s IL_0268
+	} // end .try
+	finally
+	{
+		IL_025a: ldloca.s 14
+		IL_025c: constrained. valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator<class MGSC.IScreen>
+		IL_0262: callvirt instance void [mscorlib]System.IDisposable::Dispose()
+		// if (instance.MinimapScreen.Process() || instance.SkullProjectScreen.Process() || instance.MercenaryClassScreen.Process() || instance.Hud.stationTradeInfoWindow.Process() || instance.DoorTooltip.Process() || instance.MapObjectDescTooltip.Process() || instance.CorpseInspectWindow.Process() || instance.MonsterInspectWindow.Process() || instance.ManageRaidScreen.Process())
+		IL_0267: endfinally
+	} // end handler
+
+	IL_0268: ldloc.s 8
+	IL_026a: callvirt instance class MGSC.MinimapScreen MGSC.DungeonUI::get_MinimapScreen()
+	IL_026f: callvirt instance bool MGSC.MinimapScreen::Process()
+	IL_0274: brtrue.s IL_02eb
+
+	IL_0276: ldloc.s 8
+	IL_0278: callvirt instance class MGSC.SkullProjectScreen MGSC.DungeonUI::get_SkullProjectScreen()
+	IL_027d: callvirt instance bool MGSC.SkullProjectScreen::Process()
+	IL_0282: brtrue.s IL_02eb
+
+	// (no C# code)
+	IL_0284: ldloc.s 8
+	IL_0286: callvirt instance class MGSC.MercenaryClassScreen MGSC.DungeonUI::get_MercenaryClassScreen()
+	IL_028b: callvirt instance bool MGSC.MercenaryClassScreen::Process()
+	IL_0290: brtrue.s IL_02eb
+
+	IL_0292: ldloc.s 8
+	IL_0294: callvirt instance class MGSC.DungeonHudScreen MGSC.DungeonUI::get_Hud()
+	IL_0299: ldfld class MGSC.StationTradeInfoScreen MGSC.DungeonHudScreen::stationTradeInfoWindow
+	IL_029e: callvirt instance bool MGSC.StationTradeInfoScreen::Process()
+	IL_02a3: brtrue.s IL_02eb
+
+	IL_02a5: ldloc.s 8
+	IL_02a7: callvirt instance class MGSC.DoorTooltip MGSC.DungeonUI::get_DoorTooltip()
+	IL_02ac: callvirt instance bool MGSC.DoorTooltip::Process()
+	IL_02b1: brtrue.s IL_02eb
+
+	IL_02b3: ldloc.s 8
+	IL_02b5: callvirt instance class MGSC.MapObjectDescTooltip MGSC.DungeonUI::get_MapObjectDescTooltip()
+	IL_02ba: callvirt instance bool MGSC.MapObjectDescTooltip::Process()
+	IL_02bf: brtrue.s IL_02eb
+
+	IL_02c1: ldloc.s 8
+	IL_02c3: callvirt instance class MGSC.CorpseInspectWindow MGSC.DungeonUI::get_CorpseInspectWindow()
+	IL_02c8: callvirt instance bool MGSC.CorpseInspectWindow::Process()
+	IL_02cd: brtrue.s IL_02eb
+
+	IL_02cf: ldloc.s 8
+	IL_02d1: callvirt instance class MGSC.MonsterInspectWindow MGSC.DungeonUI::get_MonsterInspectWindow()
+	IL_02d6: callvirt instance bool MGSC.MonsterInspectWindow::Process()
+	IL_02db: brtrue.s IL_02eb
+
+	IL_02dd: ldloc.s 8
+	IL_02df: callvirt instance class MGSC.ManageRaidScreen MGSC.DungeonUI::get_ManageRaidScreen()
+	IL_02e4: callvirt instance bool MGSC.ManageRaidScreen::Process()
+	IL_02e9: brfalse.s IL_02ec
+
+	// GameKey.KeyType keyType = SingletonMonoBehaviour<InputController>.Instance.GetInput(KeyLayout.DungeonIngame);
+	IL_02eb: ret
+
+	IL_02ec: call !0 class MGSC.SingletonMonoBehaviour`1<class MGSC.InputController>::get_Instance()
+	IL_02f1: ldc.i4.1
+	IL_02f2: callvirt instance valuetype MGSC.GameKey/KeyType MGSC.InputController::GetInput(valuetype MGSC.KeyLayout)
+	IL_02f7: stloc.s 9
+	// PlayerCommandQueue playerCommandQueue = _state.Get<PlayerCommandQueue>();
+	IL_02f9: ldarg.0
+	IL_02fa: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_02ff: callvirt instance !!0 MGSC.State::Get<class MGSC.PlayerCommandQueue>()
+	IL_0304: stloc.s 10
+	// BaseDungeonScenario baseDungeonScenario = Scenarios.First<BaseDungeonScenario>();
+	IL_0306: ldarg.0
+	IL_0307: call instance class MGSC.Scenarios MGSC.DungeonGameMode::get_Scenarios()
+	IL_030c: callvirt instance !!0 MGSC.Scenarios::First<class MGSC.BaseDungeonScenario>()
+	IL_0311: stloc.s 11
+	// if (baseDungeonScenario != null)
+	IL_0313: ldloc.s 11
+	IL_0315: ldnull
+	IL_0316: call bool [UnityEngine.CoreModule]UnityEngine.Object::op_Inequality(class [UnityEngine.CoreModule]UnityEngine.Object, class [UnityEngine.CoreModule]UnityEngine.Object)
+	IL_031b: brfalse.s IL_0328
+
+	// keyType = baseDungeonScenario.ValidatePlayerInput(keyType);
+	IL_031d: ldloc.s 11
+	IL_031f: ldloc.s 9
+	IL_0321: callvirt instance valuetype MGSC.GameKey/KeyType MGSC.BaseDungeonScenario::ValidatePlayerInput(valuetype MGSC.GameKey/KeyType)
+	IL_0326: stloc.s 9
+
+	// if (keyType == GameKey.KeyType.Menu && !_isCutsceneDungeon)
+	IL_0328: ldloc.s 9
+	IL_032a: ldc.i4.s 33
+	IL_032c: bne.un.s IL_0380
+
+	IL_032e: ldarg.0
+	IL_032f: ldfld bool MGSC.DungeonGameMode::_isCutsceneDungeon
+	IL_0334: brtrue.s IL_0380
+
+	// if (SharedUi.EscScreen.IgnoreESCclick)
+	IL_0336: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_033b: callvirt instance bool MGSC.EscScreen::get_IgnoreESCclick()
+	IL_0340: brfalse.s IL_0355
+
+	// SharedUi.EscScreen.IgnoreESCclick = false;
+	IL_0342: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_0347: ldc.i4.0
+	IL_0348: callvirt instance void MGSC.EscScreen::set_IgnoreESCclick(bool)
+	// playerCommandQueue.Clear();
+	IL_034d: ldloc.s 10
+	IL_034f: callvirt instance void MGSC.PlayerCommandQueue::Clear()
+	// if (SharedUi.EscScreen.IsActive)
+	IL_0354: ret
+
+	IL_0355: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_035a: callvirt instance bool MGSC.EscScreen::get_IsActive()
+	IL_035f: brfalse.s IL_036e
+
+	// SharedUi.EscScreen.Hide();
+	IL_0361: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_0366: ldc.i4.0
+	IL_0367: callvirt instance void MGSC.EscScreen::Hide(bool)
+	// SharedUi.EscScreen.Show();
+	IL_036c: br.s IL_0378
+
+	IL_036e: call class MGSC.EscScreen MGSC.SharedUi::get_EscScreen()
+	IL_0373: callvirt instance void MGSC.EscScreen::Show()
+
+	// playerCommandQueue.Clear();
+	IL_0378: ldloc.s 10
+	IL_037a: callvirt instance void MGSC.PlayerCommandQueue::Clear()
+	// else if (Input.anyKeyDown && player.CreatureData.Health.Alive && player.Creature3dView.MoveToPosInProgress)
+	IL_037f: ret
+
+	IL_0380: call bool [UnityEngine.InputLegacyModule]UnityEngine.Input::get_anyKeyDown()
+	IL_0385: brfalse.s IL_03ae
+
+	IL_0387: ldloc.0
+	IL_0388: ldfld class MGSC.CreatureData MGSC.Creature::CreatureData
+	IL_038d: ldfld class MGSC.HealthInfo MGSC.CreatureData::Health
+	IL_0392: callvirt instance bool MGSC.HealthInfo::get_Alive()
+	IL_0397: brfalse.s IL_03ae
+
+	// playerCommandQueue.Clear();
+	IL_0399: ldloc.0
+	IL_039a: callvirt instance class MGSC.Creature3dView MGSC.Creature::get_Creature3dView()
+	IL_039f: callvirt instance bool MGSC.Creature3dView::get_MoveToPosInProgress()
+	IL_03a4: brfalse.s IL_03ae
+
+	IL_03a6: ldloc.s 10
+	IL_03a8: callvirt instance void MGSC.PlayerCommandQueue::Clear()
+	// if (!TurnSystem.CanProcessPlayerTurn(turnController, turnMetadata, Creatures))
+	IL_03ad: ret
+
+	IL_03ae: ldloc.2
+	IL_03af: ldloc.1
+	IL_03b0: ldarg.0
+	IL_03b1: call instance class MGSC.Creatures MGSC.DungeonGameMode::get_Creatures()
+	IL_03b6: call bool MGSC.TurnSystem::CanProcessPlayerTurn(class MGSC.TurnController, class MGSC.TurnMetadata, class MGSC.Creatures)
+	IL_03bb: brtrue.s IL_03be
+
+	// if (!player.FreeInventoryUse && player.AnyActionProcessedFlag)
+	IL_03bd: ret
+
+	IL_03be: ldloc.0
+	IL_03bf: callvirt instance bool MGSC.Player::get_FreeInventoryUse()
+	IL_03c4: brtrue.s IL_03d6
+
+	IL_03c6: ldloc.0
+	IL_03c7: callvirt instance bool MGSC.Player::get_AnyActionProcessedFlag()
+	IL_03cc: brfalse.s IL_03d6
+
+	// player.IsProcessing = false;
+	IL_03ce: ldloc.0
+	IL_03cf: ldc.i4.0
+	IL_03d0: callvirt instance void MGSC.Creature::set_IsProcessing(bool)
+	// else if (!playerCommandQueue.Empty)
+	IL_03d5: ret
+
+	IL_03d6: ldloc.s 10
+	IL_03d8: callvirt instance bool MGSC.PlayerCommandQueue::get_Empty()
+	IL_03dd: brtrue.s IL_0455
+
+	// PlayerInteractionSystem.ProcessCmd(_state.Get<Scenarios>(), _state.Get<MapGrid>(), _state.Get<MapMetadata>(), _state.Get<MapRenderer>(), _state.Get<MapController>(), Creatures, ItemsOnFloor, MapObstacles, playerCommandQueue, turnMetadata, _state.Get<RaidMetadata>(), selectUltimateTargetController, selectGrenadeTargetController, selectPlaceableTargetController, playerCommandQueue.Pop(), out var clearCmdQueue);
+	IL_03df: ldarg.0
+	IL_03e0: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_03e5: callvirt instance !!0 MGSC.State::Get<class MGSC.Scenarios>()
+	IL_03ea: ldarg.0
+	IL_03eb: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_03f0: callvirt instance !!0 MGSC.State::Get<class MGSC.MapGrid>()
+	IL_03f5: ldarg.0
+	IL_03f6: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_03fb: callvirt instance !!0 MGSC.State::Get<class MGSC.MapMetadata>()
+	IL_0400: ldarg.0
+	IL_0401: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0406: callvirt instance !!0 MGSC.State::Get<class MGSC.MapRenderer>()
+	IL_040b: ldarg.0
+	IL_040c: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0411: callvirt instance !!0 MGSC.State::Get<class MGSC.MapController>()
+	IL_0416: ldarg.0
+	IL_0417: call instance class MGSC.Creatures MGSC.DungeonGameMode::get_Creatures()
+	IL_041c: ldarg.0
+	IL_041d: call instance class MGSC.ItemsOnFloor MGSC.DungeonGameMode::get_ItemsOnFloor()
+	IL_0422: ldarg.0
+	IL_0423: call instance class MGSC.MapObstacles MGSC.DungeonGameMode::get_MapObstacles()
+	IL_0428: ldloc.s 10
+	IL_042a: ldloc.1
+	IL_042b: ldarg.0
+	IL_042c: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0431: callvirt instance !!0 MGSC.State::Get<class MGSC.RaidMetadata>()
+	IL_0436: ldloc.s 4
+	IL_0438: ldloc.3
+	IL_0439: ldloc.s 5
+	IL_043b: ldloc.s 10
+	IL_043d: callvirt instance class MGSC.ICommand MGSC.PlayerCommandQueue::Pop()
+	IL_0442: ldloca.s 17
+	IL_0444: call void MGSC.PlayerInteractionSystem::ProcessCmd(class MGSC.Scenarios, class MGSC.MapGrid, class MGSC.MapMetadata, class MGSC.MapRenderer, class MGSC.MapController, class MGSC.Creatures, class MGSC.ItemsOnFloor, class MGSC.MapObstacles, class MGSC.PlayerCommandQueue, class MGSC.TurnMetadata, class MGSC.RaidMetadata, class MGSC.SelectUltimateTargetController, class MGSC.SelectGrenadeTargetController, class MGSC.SelectPlaceableTargetController, class MGSC.ICommand, bool&)
+	// if (clearCmdQueue)
+	IL_0449: ldloc.s 17
+	IL_044b: brfalse.s IL_0454
+
+	// playerCommandQueue.Clear();
+	IL_044d: ldloc.s 10
+	IL_044f: callvirt instance void MGSC.PlayerCommandQueue::Clear()
+
+	// PlayerInteractionSystem.ProcessInput(_state.Get<MapGrid>(), _state.Get<MapMetadata>(), _state.Get<MapRenderer>(), _state.Get<MapController>(), Creatures, ItemsOnFloor, MapObstacles, GameCamera, playerCommandQueue, turnMetadata, _state.Get<RaidMetadata>(), _state.Get<LocationMetadata>(), selectUltimateTargetController, selectGrenadeTargetController, selectShootTargetController, selectVestController, Scenarios, keyType);
+	IL_0454: ret
+
+	IL_0455: ldarg.0
+	IL_0456: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_045b: callvirt instance !!0 MGSC.State::Get<class MGSC.MapGrid>()
+	IL_0460: ldarg.0
+	IL_0461: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0466: callvirt instance !!0 MGSC.State::Get<class MGSC.MapMetadata>()
+	IL_046b: ldarg.0
+	IL_046c: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_0471: callvirt instance !!0 MGSC.State::Get<class MGSC.MapRenderer>()
+	IL_0476: ldarg.0
+	IL_0477: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_047c: callvirt instance !!0 MGSC.State::Get<class MGSC.MapController>()
+	IL_0481: ldarg.0
+	IL_0482: call instance class MGSC.Creatures MGSC.DungeonGameMode::get_Creatures()
+	IL_0487: ldarg.0
+	IL_0488: call instance class MGSC.ItemsOnFloor MGSC.DungeonGameMode::get_ItemsOnFloor()
+	IL_048d: ldarg.0
+	IL_048e: call instance class MGSC.MapObstacles MGSC.DungeonGameMode::get_MapObstacles()
+	IL_0493: ldarg.0
+	IL_0494: call instance class MGSC.GameCamera MGSC.DungeonGameMode::get_GameCamera()
+	IL_0499: ldloc.s 10
+	IL_049b: ldloc.1
+	IL_049c: ldarg.0
+	IL_049d: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_04a2: callvirt instance !!0 MGSC.State::Get<class MGSC.RaidMetadata>()
+	IL_04a7: ldarg.0
+	IL_04a8: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+	IL_04ad: callvirt instance !!0 MGSC.State::Get<class MGSC.LocationMetadata>()
+	IL_04b2: ldloc.s 4
+	IL_04b4: ldloc.3
+	IL_04b5: ldloc.s 6
+	IL_04b7: ldloc.s 7
+	IL_04b9: ldarg.0
+	IL_04ba: call instance class MGSC.Scenarios MGSC.DungeonGameMode::get_Scenarios()
+	IL_04bf: ldloc.s 9
+	IL_04c1: call void MGSC.PlayerInteractionSystem::ProcessInput(class MGSC.MapGrid, class MGSC.MapMetadata, class MGSC.MapRenderer, class MGSC.MapController, class MGSC.Creatures, class MGSC.ItemsOnFloor, class MGSC.MapObstacles, class MGSC.GameCamera, class MGSC.PlayerCommandQueue, class MGSC.TurnMetadata, class MGSC.RaidMetadata, class MGSC.LocationMetadata, class MGSC.SelectUltimateTargetController, class MGSC.SelectGrenadeTargetController, class MGSC.SelectShootTargetController, class MGSC.SelectVestController, class MGSC.Scenarios, valuetype MGSC.GameKey/KeyType)
+	// if (!playerCommandQueue.Empty)
+	IL_04c6: ldloc.s 10
+	IL_04c8: callvirt instance bool MGSC.PlayerCommandQueue::get_Empty()
+	IL_04cd: brtrue.s IL_04d6
+
+	// playerCommandQueue.Clear();
+	IL_04cf: ldloc.s 10
+	IL_04d1: callvirt instance void MGSC.PlayerCommandQueue::Clear()
+
+	// (no C# code)
+	IL_04d6: ret
+} // end of method DungeonGameMode::Update

@@ -22,7 +22,14 @@ namespace QM_SpeedToggle
         public CreatureAnimationSpeed AnimationSpeed = CreatureAnimationSpeed.X8;
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public SpeedActivationMode ActivationMode = SpeedActivationMode.Hold;
+        public SpeedActivationMode ActivationMode = SpeedActivationMode.Toggle;
+
+        /// <summary>
+        /// If true, will not count the Speed Key as a key that will stop
+        /// movement.  Allows the user to toggle in and out of speed mode without stopping
+        /// </summary>
+        public bool DoNotStopOnSpeedKeyDown { get; set; } = true;
+
 
         /// <summary>
         /// Loads the configuration
