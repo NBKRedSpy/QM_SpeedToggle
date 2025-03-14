@@ -1,6 +1,18 @@
 [h1]Quasimorph Speed Toggle[/h1]
 
 
+[h1]Important - This version of the mod is only for the opt in beta version of the game![/h1]
+
+This is a temporary version that supports the 0.8.6 beta, and not the current game's version.
+For the non beta version of the game, use the mod of the same name without the BETA suffix.
+
+The non beta version [i]must[/i] be uninstalled.
+When the 0.8.6 becomes the main version, this mod will be deleted.
+Note that the beta is expected to change many times before release.
+As such, this mod may break on each beta release.
+
+[h1]Docs[/h1]
+
 Want to move across the map quickly, but don't want to want combat to be at x8 speed all the time?
 This mod allows the player to temporarily change the game's "animation speed" to x8 by holding a key.
 
@@ -81,6 +93,11 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 [h1]Change Log[/h1]
+
+[h1]1.3.0[/h1]
+[list]
+[*]Compatible with 0.8.6
+[/list]
 
 [h1]1.2.0[/h1]
 [list]
