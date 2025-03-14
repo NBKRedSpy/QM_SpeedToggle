@@ -2,6 +2,18 @@
 
 ![thumbnail icon](media/thumbnail.png)
 
+# Important - This version of the mod is only for the opt in beta version of the game!
+
+This is a temporary version that supports the 0.8.6 beta, and not the current game's version.
+For the non beta version of the game, use the mod of the same name without the BETA suffix.
+
+The non beta version *must* be uninstalled.  
+When the 0.8.6 becomes the main version, this mod will be deleted.
+Note that the beta is expected to change many times before release.
+As such, this mod may break on each beta release.
+
+# Docs
+
 Want to move across the map quickly, but don't want to want combat to be at x8 speed all the time?
 This mod allows the player to temporarily change the game's "animation speed" to x8 by holding a key.
 
@@ -42,6 +54,9 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 # Change Log
+
+# 1.3.0
+* Compatible with 0.8.6
 
 # 1.2.0
 * 0.8.5 added logic to stop player movement when any key is pressed.  This update has the option DoNotStopOnSpeedKeyDown to ignore the Speed Toggle Key.  It is enabled by default.
