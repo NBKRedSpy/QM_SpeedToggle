@@ -9,7 +9,7 @@ using MGSC;
 namespace QM_SpeedToggle
 {
     /// <summary>
-    /// Used to prevent the speed hack from affecting the game's default speed.
+    /// Used to prevent the speed value in the settings from being affected by the temporary speed hack.
     /// </summary>
     [HarmonyPatch(typeof(GeneralPage), nameof(GeneralPage.InitCreatureAnimDropdown))]
     public static class GeneralPage_InitCreatureAnimDropdown__Patch

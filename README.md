@@ -43,6 +43,9 @@ Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggl
 
 # Change Log
 
+# 1.3.0
+* Compatible with 0.8.6
+
 # 1.2.0
 * 0.8.5 added logic to stop player movement when any key is pressed.  This update has the option DoNotStopOnSpeedKeyDown to ignore the Speed Toggle Key.  It is enabled by default.
 

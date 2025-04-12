@@ -3,7 +3,9 @@ using MGSC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -37,23 +39,32 @@ namespace QM_SpeedToggle
             //  else if (____ IsNotSpeedKey && ____ Input.anyKeyDown && player.CreatureData.Health.Alive && player.Creature3dView.MoveToPosInProgress)
 
 
-            //IL
-            //IL_037f: ret
+            //Original IL:
+            //IL_0117: ldarg.0
+            //IL_0118: ldfld class MGSC.State MGSC.DungeonGameMode::_state
+            //IL_011d: callvirt instance !!0 MGSC.State::Get<class MGSC.PlayerCommandQueue>()
+            //IL_0122: stloc.s 6
+            //// if (Input.anyKeyDown && player.CreatureData.Health.Alive && player.Creature3dView.MoveToPosInProgress)
+            //IL_0124: call bool [UnityEngine.InputLegacyModule]UnityEngine.Input::get_anyKeyDown()
+            //IL_0129: brfalse.s IL_0152
 
             //-----new code start -----
             //call IsSpeedKey here
-            //IL_0385: brtrue IL_03ae
+            //IL_0385: brtrue IL_0152
             //-----new code end -----
-            //IL_0380: call bool [UnityEngine.InputLegacyModule]UnityEngine.Input::get_anyKeyDown()
-            //IL_0385: brfalse.s IL_03ae
 
+	        //IL_012b: ldloc.0
+	        //IL_012c: ldfld class MGSC.CreatureData MGSC.Creature::CreatureData
+	        //IL_0131: ldfld class MGSC.HealthInfo MGSC.CreatureData::Health
+            
             Label? ifBranchLabel = null;
 
             List<CodeInstruction> newInstructions = new CodeMatcher(original)
                 .MatchEndForward(
-                    CodeMatch.IsLdloc(),
-                    CodeMatch.Calls(() => new PlayerCommandQueue().Clear()),
-                    new CodeMatch(OpCodes.Ret), //Harmony has as a br, but it goes to the end so is the same as ILSpy's ret
+                    CodeMatch.IsLdarg(),
+                    CodeMatch.LoadsField(AccessTools.Field(typeof(DungeonGameMode), nameof(DungeonGameMode._state))),
+                    CodeMatch.Calls(() => new State().Get<PlayerCommandQueue>()),
+                    new CodeMatch(OpCodes.Stloc_S), 
                     CodeMatch.Calls(AccessTools.PropertyGetter(typeof(Input), nameof(Input.anyKeyDown))),
                     new CodeMatch((op) => op.Branches(out ifBranchLabel))
                 )
@@ -65,6 +76,7 @@ namespace QM_SpeedToggle
                     CodeInstruction.Call(typeof(DungeonGameMode_Update__Patch), nameof(DungeonGameMode_Update__Patch.IsSpeedKey)),
                     new CodeInstruction(OpCodes.Brtrue, ifBranchLabel.Value)
                 )
+                //Just a precaution
                 .MatchEndForward(
                     CodeMatch.IsLdloc(),
                     CodeMatch.LoadsField(AccessTools.Field(typeof(Creature), nameof(Creature.CreatureData))),
