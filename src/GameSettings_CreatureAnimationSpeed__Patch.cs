@@ -26,14 +26,22 @@ namespace QM_SpeedToggle
         /// </summary>
         public static bool Disable = false;
 
+        /// <summary>
+        /// True if the speed hack is enabled.
+        /// </summary>
+        public static bool IsAccelerated = false;
+
         public static void Postfix(ref CreatureAnimationSpeed __result)
         {
+            IsAccelerated = false;
+
             if (Disable) return;
 
             if(Mode == SpeedActivationMode.Toggle)
             {
                 if (ToggleSpeedKey.ToggledOn)
                 {
+                    IsAccelerated = true;
                     __result = Speed;
                 }
             }
@@ -42,6 +50,7 @@ namespace QM_SpeedToggle
                 //Assume hold, which is the only other option currently.
                 if(Input.GetKey(ToggleSpeedKey.Key))
                 {
+                    IsAccelerated = true;
                     __result = Speed;
                 }
             }
