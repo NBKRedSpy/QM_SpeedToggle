@@ -2,6 +2,7 @@
 using MGSC;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,24 +18,23 @@ namespace QM_SpeedToggle
     public static class GameSettings_CreatureAnimationSpeed__Patch
     {
 
-        public static CreatureAnimationSpeed Speed = CreatureAnimationSpeed.X8;
         public static SpeedActivationMode Mode = SpeedActivationMode.Toggle;
-
-        /// <summary>
-        /// Used to temporarily disable the speed change.  For instance, to prevent the hack
-        /// from affecting the game settings page.
-        /// </summary>
-        public static bool Disable = false;
 
         public static void Postfix(ref CreatureAnimationSpeed __result)
         {
-            if (Disable) return;
+             if (Plugin.ToggleSpeedUtil.Disable) return;
 
-            if(Mode == SpeedActivationMode.Toggle)
+            //This sets the Fake Speed enum.  This is used for other patches
+            //  to bypass switch statements so the fake speed will be used instead.
+
+            Plugin.ToggleSpeedUtil.SpeedUpIsEngaged = false;
+
+            if (Mode == SpeedActivationMode.Toggle)
             {
                 if (ToggleSpeedKey.ToggledOn)
                 {
-                    __result = Speed;
+                    Plugin.ToggleSpeedUtil.SpeedUpIsEngaged = true;
+                    __result = ToggleSpeedUtil.FakeCreatureAnimationSpeed;
                 }
             }
             else
@@ -42,7 +42,8 @@ namespace QM_SpeedToggle
                 //Assume hold, which is the only other option currently.
                 if(Input.GetKey(ToggleSpeedKey.Key))
                 {
-                    __result = Speed;
+                    Plugin.ToggleSpeedUtil.SpeedUpIsEngaged = true;
+                    __result = ToggleSpeedUtil.FakeCreatureAnimationSpeed;
                 }
             }
         }

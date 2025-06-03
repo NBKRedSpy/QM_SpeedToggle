@@ -16,12 +16,12 @@ namespace QM_SpeedToggle
     {
         public static void Prefix()
         {
-            GameSettings_CreatureAnimationSpeed__Patch.Disable = true;
+            Plugin.ToggleSpeedUtil.Disable = true;
         }
 
         public static void Postfix()
         {
-            GameSettings_CreatureAnimationSpeed__Patch.Disable = false;
+            Plugin.ToggleSpeedUtil.Disable = false;
         }
 
     }

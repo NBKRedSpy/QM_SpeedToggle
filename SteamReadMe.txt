@@ -40,11 +40,11 @@ The configuration file will be created on the first game run and can be found at
 [/td]
 [/tr]
 [tr]
-[td]AnimationSpeed
+[td]SpeedMultiplier
 [/td]
-[td]X8
+[td]8
 [/td]
-[td]The speed change to apply.  Important! This can only be X1, X2, X4, or X8
+[td]The animation speed to use when activated.
 [/td]
 [/tr]
 [tr]
@@ -81,6 +81,12 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 [h1]Change Log[/h1]
+
+[h1]2.0.0[/h1]
+[list]
+[*]Supports any speed, not just the game's hard coded 1x - 8x.
+[*]The merc no longer waits for the door animations when the speed toggle is activated.
+[/list]
 
 [h1]1.3.0[/h1]
 [list]

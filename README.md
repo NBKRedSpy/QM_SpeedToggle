@@ -24,7 +24,7 @@ The configuration file will be created on the first game run and can be found at
 |Name|Default|Description|
 |--|--|--|
 |ToggleKey|CapsLock|The key that will activate the speed change.  See the [Key List](#key-list) section.|
-|AnimationSpeed|X8|The speed change to apply.  Important! This can only be X1, X2, X4, or X8|
+|SpeedMultiplier|8|The animation speed to use when activated.|
 |ActivationMode|Hold|How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates|
 |DoNotStopOnSpeedKeyDown|true|When set to `true`, will not stop the player's movement when the Speed Toggle Key is pressed.  `false` uses the game's default logic where any key press will stop the player's queued movement.|
 
@@ -42,6 +42,10 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 # Change Log
+
+# 2.0.0
+* Supports any speed, not just the game's hard coded 1x - 8x.
+* The merc no longer waits for the door animations when the speed toggle is activated.
 
 # 1.3.0
 * Compatible with 0.8.6

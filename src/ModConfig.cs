@@ -18,8 +18,7 @@ namespace QM_SpeedToggle
         [JsonConverter(typeof(StringEnumConverter))]
         public KeyCode ToggleKey = KeyCode.CapsLock;
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public CreatureAnimationSpeed AnimationSpeed = CreatureAnimationSpeed.X8;
+        public int SpeedMultiplier { get; set; } = 8;
 
         [JsonConverter(typeof(StringEnumConverter))]
         public SpeedActivationMode ActivationMode = SpeedActivationMode.Toggle;
