@@ -42,6 +42,8 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 # Change Log
+# 1.4.0
+* Instant door opening.  When the speed is enabled, the doors will not cause the merc to pause.  This does not affect the game in any way; it simply removes the door opening animation.  This makes moving through multiple doors much faster.
 
 # 1.3.0
 * Compatible with 0.8.6

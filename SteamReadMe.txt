@@ -82,6 +82,11 @@ Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggl
 
 [h1]Change Log[/h1]
 
+[h1]1.4.0[/h1]
+[list]
+[*]Instant door opening.  When the speed is enabled, the doors will not cause the merc to pause.  This does not affect the game in any way; it simply removes the door opening animation.  This makes moving through multiple doors much faster.
+[/list]
+
 [h1]1.3.0[/h1]
 [list]
 [*]Compatible with 0.8.6
