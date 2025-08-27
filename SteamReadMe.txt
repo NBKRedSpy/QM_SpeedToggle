@@ -50,7 +50,7 @@ The configuration file will be created on the first game run and can be found at
 [tr]
 [td]ActivationMode
 [/td]
-[td]Hold
+[td]Toggle
 [/td]
 [td]How the key will activate the speed change.  Toggle = tapping the key cycles between on or off.  Hold = Holding the key activates, releasing deactivates
 [/td]
@@ -76,11 +76,22 @@ Use "None" to not bind the key.
 If you enjoy my mods and want to buy me a coffee, check out my [url=https://ko-fi.com/nbkredspy71915]Ko-Fi[/url] page.
 Thanks!
 
+[h1]Credits[/h1]
+[list]
+[*]Special thanks to Crynano for his excellent Mod Configuration Menu.
+[/list]
+
 [h1]Source Code[/h1]
 
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_SpeedToggle
 
 [h1]Change Log[/h1]
+
+[h1]1.5.0[/h1]
+[list]
+[*]MCM integration
+[*]Changed default mode to Toggle from Hold.
+[/list]
 
 [h1]1.4.0[/h1]
 [list]

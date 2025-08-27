@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using MGSC;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using QM_SpeedToggle.Mcm;
 using UnityEngine;
 
 namespace QM_SpeedToggle
 {
-    public class ModConfig
+    public class ModConfig : ISave
     {
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -22,13 +23,22 @@ namespace QM_SpeedToggle
         public CreatureAnimationSpeed AnimationSpeed = CreatureAnimationSpeed.X8;
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public SpeedActivationMode ActivationMode = SpeedActivationMode.Toggle;
+        public SpeedActivationMode ActivationMode = SpeedActivationMode.Hold;
 
         /// <summary>
         /// If true, will not count the Speed Key as a key that will stop
         /// movement.  Allows the user to toggle in and out of speed mode without stopping
         /// </summary>
         public bool DoNotStopOnSpeedKeyDown { get; set; } = true;
+
+        [JsonIgnore]
+        private static JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented,
+        };
+
+        [JsonIgnore]
+        private static string ConfigPath { get; set; } = Plugin.ConfigDirectories.ConfigPath;
 
 
         /// <summary>
@@ -40,10 +50,7 @@ namespace QM_SpeedToggle
         {
             ModConfig config;
 
-            JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-            };
+            ConfigPath = configPath;
 
             if (File.Exists(configPath))
             {
@@ -51,10 +58,10 @@ namespace QM_SpeedToggle
                 {
                     string sourceJson = File.ReadAllText(configPath);
 
-                    config = JsonConvert.DeserializeObject<ModConfig>(sourceJson, serializerSettings);
+                    config = JsonConvert.DeserializeObject<ModConfig>(sourceJson, SerializerSettings);
 
                     //Add any new elements that have been added since the last mod version the user had.
-                    string upgradeConfig = JsonConvert.SerializeObject(config, serializerSettings);
+                    string upgradeConfig = JsonConvert.SerializeObject(config, SerializerSettings);
 
                     if (upgradeConfig != sourceJson)
                     {
@@ -78,14 +85,19 @@ namespace QM_SpeedToggle
             else
             {
                 config = new ModConfig();
-                
-                string json = JsonConvert.SerializeObject(config, serializerSettings);
-                File.WriteAllText(configPath, json);
-
+                config.Save();
                 return config;
             }
 
 
         }
+
+        public void Save()
+        {
+            string json = JsonConvert.SerializeObject(this, SerializerSettings);
+            File.WriteAllText(ConfigPath, json);
+        }
+
+
     }
 }
