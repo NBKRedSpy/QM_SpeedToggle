@@ -33,7 +33,7 @@ namespace QM_SpeedToggle.Mcm
                 CreateReadOnly(nameof(ModConfig.ActivationMode)),
                 CreateReadOnly(nameof(ModConfig.AnimationSpeed)),
                 CreateReadOnly(nameof(ModConfig.ToggleKey)),
-                CreateResetMessage(),
+                CreateRestartMessage(),
             }, OnSave);
         }
          

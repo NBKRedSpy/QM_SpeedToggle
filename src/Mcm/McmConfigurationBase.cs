@@ -69,9 +69,9 @@ namespace QM_SpeedToggle.Mcm
         public abstract void Configure();
 
 
-        protected ConfigValue CreateResetMessage()
+        protected ConfigValue CreateRestartMessage()
         {
-            return new ConfigValue("__Restart", "The game must be restarted for any changes to take effect.", "Reset");
+            return new ConfigValue("__Restart", "The game must be restarted for any changes to take effect.", "Restart");
 
         }
         /// <summary>
