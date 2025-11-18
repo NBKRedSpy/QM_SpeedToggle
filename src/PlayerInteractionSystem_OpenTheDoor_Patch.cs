@@ -20,8 +20,7 @@ namespace QM_SpeedToggle
             if (GameSettings_CreatureAnimationSpeed__Patch.IsAccelerated)
             {
 
-                //WARNING COPY - The RemovePause is a direct copy and replace with the 
-                //  game's PlayerInteractionSystem.OpenTheDoor function.
+                //WARNING COPY - PlayerInteractionSystem.OpenTheDoor. 
                 //There is so little code, it wasn't worth a transpile.
                 OriginalRemovePause(creatures, scenarios, turnMetadata, door);
                 return false;
