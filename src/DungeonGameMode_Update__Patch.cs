@@ -14,6 +14,7 @@ using static HarmonyLib.Code;
 namespace QM_SpeedToggle
 {
     [HarmonyPatch(typeof(DungeonGameMode), nameof(DungeonGameMode.Update))]
+    [HarmonyBefore("NBKRedSpy_RedsOptionalTweaks")]
     public static class DungeonGameMode_Update__Patch
     {
 
